@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fleetstream
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetstream-cluster-headless
+  namespace: fleetstream
+spec:
+  clusterIP: None
+  selector:
+    app: fleetstream-cluster
+  ports:
+    - name: management
+      port: 8558
+    - name: remoting
+      port: 2551
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: fleetstream-cluster
+  namespace: fleetstream
+spec:
+  serviceName: fleetstream-cluster-headless
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fleetstream-cluster
+  template:
+    metadata:
+      labels:
+        app: fleetstream-cluster
+    spec:
+      containers:
+        - name: app
+          image: fleetstream:latest
+          ports:
+            - containerPort: 8558
+              name: management
+            - containerPort: 2551
+              name: remoting
+            - containerPort: 8080
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetstream-control
+  namespace: fleetstream
+spec:
+  type: ClusterIP
+  selector:
+    app: fleetstream-cluster
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: http
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fleetstream-config
+  namespace: fleetstream
+data:
+  AKKA_CLUSTER_BOOTSTRAP: "true"
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: fleetstream-monitor
+  namespace: fleetstream
+spec:
+  selector:
+    matchLabels:
+      app: fleetstream-cluster
+  endpoints:
+    - port: http
+      path: /metrics
