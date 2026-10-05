@@ -13,7 +13,7 @@ val hikariVersion = "5.1.0"
 val flywayVersion = "10.4.1"
 val scalaTestVersion = "3.2.18"
 val logbackVersion = "1.4.14"
-val jacksonVersion = "2.15.2"
+val jacksonVersion = "2.13.4"
 
 lazy val root = (project in file("."))
   .aggregate(core, cluster, loadgen)
@@ -28,7 +28,9 @@ lazy val core = (project in file("core"))
     libraryDependencies ++= Seq(
       "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
       "com.typesafe.akka" %% "akka-stream" % akkaVersion,
-      "com.typesafe.akka" %% "akka-serialization-jackson" % akkaVersion,
+      "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
       "com.influxdb" % "influxdb-client-java" % influxClientVersion,
       "org.scalatest" %% "scalatest" % scalaTestVersion % Test,
       "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
@@ -46,9 +48,11 @@ lazy val cluster = (project in file("cluster"))
       "com.typesafe.akka" %% "akka-cluster-typed" % akkaVersion,
       "com.typesafe.akka" %% "akka-cluster-sharding-typed" % akkaVersion,
       "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
-      "com.typesafe.akka" %% "akka-serialization-jackson" % akkaVersion,
+      "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
       "org.postgresql" % "postgresql" % postgresVersion,
-      "com.zaxxer" % HikariCP % hikariVersion,
+      "com.zaxxer" % "HikariCP" % hikariVersion,
       "org.flywaydb" % "flyway-core" % flywayVersion,
       "org.scalatest" %% "scalatest" % scalaTestVersion % Test,
       "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion % Test,
@@ -67,6 +71,7 @@ lazy val loadgen = (project in file("loadgen"))
       "org.hdrhistogram" % "HdrHistogram" % "2.2.2",
       "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
       "org.scalatest" %% "scalatest" % scalaTestVersion % Test,
       "ch.qos.logback" % "logback-classic" % logbackVersion
     )
