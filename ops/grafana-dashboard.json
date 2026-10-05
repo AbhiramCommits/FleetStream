@@ -1,0 +1,20 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Ingest Throughput (msg/s)",
+      "type": "stat",
+      "targets": [{ "expr": "rate(fleetstream_ingest_total[1m])" }]
+    },
+    {
+      "id": 2,
+      "title": "Ingest P99 Latency",
+      "type": "timeseries",
+      "targets": [{ "expr": "fleetstream_ingest_latency_p99" }]
+    }
+  ],
+  "title": "FleetStream Dashboard",
+  "uid": "fleetstream-main"
+}
