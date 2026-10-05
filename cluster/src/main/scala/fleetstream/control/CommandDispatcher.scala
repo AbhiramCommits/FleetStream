@@ -18,18 +18,24 @@ class CommandDispatcher(
 )(implicit ec: ExecutionContext) {
 
   sealed trait DispatchMessage
-  final case class RetryCommand(command: Command, attempt: Int, replyTo: ActorRef[DeviceActor.CommandAckResponse]) extends DispatchMessage
+  final case class RetryCommand(
+      command: Command,
+      attempt: Int,
+      replyTo: ActorRef[DeviceActor.CommandAckResponse]
+  ) extends DispatchMessage
 
-  def dispatch(command: Command, replyTo: ActorRef[DeviceActor.CommandAckResponse])(implicit context: ActorContext[DispatchMessage]): Unit = {
+  def dispatch(command: Command, replyTo: ActorRef[DeviceActor.CommandAckResponse])(implicit
+      context: ActorContext[DispatchMessage]
+  ): Unit = {
     val audit = CommandAuditRecord(
-      command.commandId,
-      command.deviceId,
-      command.getClass.getSimpleName,
-      command.toString,
-      command.issuedAt,
-      None,
-      0,
-      "pending"
+        command.commandId,
+        command.deviceId,
+        command.getClass.getSimpleName,
+        command.toString,
+        command.issuedAt,
+        None,
+        0,
+        "pending"
     )
     repo.saveCommand(audit)
 

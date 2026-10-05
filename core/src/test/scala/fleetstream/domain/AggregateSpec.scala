@@ -42,9 +42,9 @@ class AggregateSpec extends AnyWordSpec with Matchers {
 
     "equal folding merge over single-element aggregates" in {
       val ts = Seq(
-        Telemetry("dev-1", Instant.ofEpochMilli(1000L), 80.0, 2.0, 400.0, 30.0, 1L),
-        Telemetry("dev-1", Instant.ofEpochMilli(1000L), 79.0, 4.0, 400.0, 31.0, 2L),
-        Telemetry("dev-1", Instant.ofEpochMilli(1000L), 78.0, 6.0, 400.0, 32.0, 3L)
+          Telemetry("dev-1", Instant.ofEpochMilli(1000L), 80.0, 2.0, 400.0, 30.0, 1L),
+          Telemetry("dev-1", Instant.ofEpochMilli(1000L), 79.0, 4.0, 400.0, 31.0, 2L),
+          Telemetry("dev-1", Instant.ofEpochMilli(1000L), 78.0, 6.0, 400.0, 32.0, 3L)
       )
 
       val direct = Aggregate.from(ts)

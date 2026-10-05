@@ -26,12 +26,12 @@ object Aggregate {
     val maxTempC = window.map(_.tempC).max
 
     Aggregate(
-      WindowKey(deviceId, windowStart),
-      count,
-      meanPowerKw,
-      maxPowerKw,
-      minSocPercent,
-      maxTempC
+        WindowKey(deviceId, windowStart),
+        count,
+        meanPowerKw,
+        maxPowerKw,
+        minSocPercent,
+        maxTempC
     )
   }
 
@@ -45,12 +45,12 @@ object Aggregate {
       val minSoc = math.min(a.minSocPercent, b.minSocPercent)
       val maxTemp = math.max(a.maxTempC, b.maxTempC)
       Aggregate(
-        a.key,
-        totalCount,
-        meanPower,
-        maxPower,
-        minSoc,
-        maxTemp
+          a.key,
+          totalCount,
+          meanPower,
+          maxPower,
+          minSoc,
+          maxTemp
       )
     }
   }

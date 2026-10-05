@@ -20,11 +20,11 @@ class FleetSimulator(devices: Int, ratePerDevice: Double, durationSec: Int) {
 
     val memSink = new InMemorySink()
     val cfg = IngestConfig(
-      maxSubstreams = devices,
-      windowDuration = 1.second,
-      batchSize = 100,
-      bufferSize = 10000,
-      overflowStrategy = OverflowStrategy.dropNew
+        maxSubstreams = devices,
+        windowDuration = 1.second,
+        batchSize = 100,
+        bufferSize = 10000,
+        overflowStrategy = OverflowStrategy.dropNew
     )
 
     val pipeline = IngestPipeline(cfg, memSink.sink)
@@ -44,13 +44,13 @@ class FleetSimulator(devices: Int, ratePerDevice: Double, durationSec: Int) {
         for (d <- 0 until devices) {
           val deviceId = s"device-$d"
           val t = Telemetry(
-            deviceId,
-            Instant.now(),
-            50.0 + rnd.nextDouble() * 40.0,
-            2.0 + rnd.nextDouble() * 8.0,
-            400.0 + rnd.nextDouble() * 10.0,
-            25.0 + rnd.nextDouble() * 15.0,
-            sec.toLong
+              deviceId,
+              Instant.now(),
+              50.0 + rnd.nextDouble() * 40.0,
+              2.0 + rnd.nextDouble() * 8.0,
+              400.0 + rnd.nextDouble() * 10.0,
+              25.0 + rnd.nextDouble() * 15.0,
+              sec.toLong
           )
           queue.offer(TelemetryCodec.encode(t))
         }
@@ -65,11 +65,12 @@ class FleetSimulator(devices: Int, ratePerDevice: Double, durationSec: Int) {
     emitThread.start()
     emitThread.join()
 
-    val stat = try {
-      Await.result(streamFuture, 5.seconds)
-    } catch {
-      case _: Throwable => fleetstream.ingest.IngestStat(totalTelemetry, 0L)
-    }
+    val stat =
+      try {
+        Await.result(streamFuture, 5.seconds)
+      } catch {
+        case _: Throwable => fleetstream.ingest.IngestStat(totalTelemetry, 0L)
+      }
 
     val durationActual = (System.currentTimeMillis() - startTime) / 1000.0
     system.terminate()

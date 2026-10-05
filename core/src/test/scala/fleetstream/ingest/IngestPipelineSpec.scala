@@ -12,7 +12,8 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-class IngestPipelineSpec extends TestKit(ActorSystem("IngestPipelineSpec"))
+class IngestPipelineSpec
+    extends TestKit(ActorSystem("IngestPipelineSpec"))
     with AnyWordSpecLike
     with Matchers
     with BeforeAndAfterAll {
@@ -24,11 +25,11 @@ class IngestPipelineSpec extends TestKit(ActorSystem("IngestPipelineSpec"))
   "IngestPipeline" should {
     "drop malformed payloads and count them in IngestStat" in {
       val cfg = IngestConfig(
-        maxSubstreams = 10,
-        windowDuration = 100.millis,
-        batchSize = 1,
-        bufferSize = 100,
-        overflowStrategy = OverflowStrategy.fail
+          maxSubstreams = 10,
+          windowDuration = 100.millis,
+          batchSize = 1,
+          bufferSize = 100,
+          overflowStrategy = OverflowStrategy.fail
       )
 
       val memSink = new InMemorySink()
@@ -54,11 +55,11 @@ class IngestPipelineSpec extends TestKit(ActorSystem("IngestPipelineSpec"))
 
     "aggregate telemetry per device correctly" in {
       val cfg = IngestConfig(
-        maxSubstreams = 10,
-        windowDuration = 200.millis,
-        batchSize = 1,
-        bufferSize = 100,
-        overflowStrategy = OverflowStrategy.fail
+          maxSubstreams = 10,
+          windowDuration = 200.millis,
+          batchSize = 1,
+          bufferSize = 100,
+          overflowStrategy = OverflowStrategy.fail
       )
 
       val memSink = new InMemorySink()

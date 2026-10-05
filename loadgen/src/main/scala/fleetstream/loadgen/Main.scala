@@ -18,7 +18,9 @@ object Main {
       case _ =>
     }
 
-    println(s"Starting FleetSimulator with $devices devices, rate $rate msg/s/device for $duration seconds...")
+    println(
+        s"Starting FleetSimulator with $devices devices, rate $rate msg/s/device for $duration seconds..."
+    )
 
     val simulator = new FleetSimulator(devices, rate, duration)
     val (valid, rejected, actualSec) = simulator.run()

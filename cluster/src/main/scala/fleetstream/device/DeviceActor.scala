@@ -12,8 +12,10 @@ object DeviceActor {
   val EntityTypeKey: akka.cluster.sharding.typed.scaladsl.EntityTypeKey[CommandMessage] =
     akka.cluster.sharding.typed.scaladsl.EntityTypeKey[CommandMessage]("DeviceActor")
 
-  final case class Ingest(aggregate: Aggregate, replyTo: Option[ActorRef[AckResponse]] = None) extends CommandMessage
-  final case class Apply(command: Command, replyTo: ActorRef[CommandAckResponse]) extends CommandMessage
+  final case class Ingest(aggregate: Aggregate, replyTo: Option[ActorRef[AckResponse]] = None)
+      extends CommandMessage
+  final case class Apply(command: Command, replyTo: ActorRef[CommandAckResponse])
+      extends CommandMessage
   final case class Ack(ack: CommandAck) extends CommandMessage
   final case class GetState(replyTo: ActorRef[DeviceState]) extends CommandMessage
 
@@ -54,15 +56,34 @@ object DeviceActor {
           cmd match {
             case Command.SetPower(_, targetKw, commandId, _) =>
               replyTo ! CommandDispatched(commandId)
-              active(deviceId, repo, lastAggregate, Some(targetKw), mode, pendingCommands + (commandId -> cmd))
+              active(
+                  deviceId,
+                  repo,
+                  lastAggregate,
+                  Some(targetKw),
+                  mode,
+                  pendingCommands + (commandId -> cmd)
+              )
             case Command.SetMode(_, newMode, commandId, _) =>
               replyTo ! CommandDispatched(commandId)
-              active(deviceId, repo, lastAggregate, currentSetpoint, newMode, pendingCommands + (commandId -> cmd))
+              active(
+                  deviceId,
+                  repo,
+                  lastAggregate,
+                  currentSetpoint,
+                  newMode,
+                  pendingCommands + (commandId -> cmd)
+              )
           }
 
         case Ack(ack) =>
           val updatedPending = pendingCommands - ack.commandId
-          repo.updateCommandStatus(ack.commandId, if (ack.accepted) "acked" else "failed", Some(ack.ackedAt), 1)
+          repo.updateCommandStatus(
+              ack.commandId,
+              if (ack.accepted) "acked" else "failed",
+              Some(ack.ackedAt),
+              1
+          )
           active(deviceId, repo, lastAggregate, currentSetpoint, mode, updatedPending)
 
         case GetState(replyTo) =>
