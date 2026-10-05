@@ -1,0 +1,8 @@
+target/
+.bsp/
+.idea/
+data/
+project/project/
+project/target/
+.DS_Store
+results/
