@@ -1,0 +1,5 @@
+{
+  "maxP99IngestMs": 15.0,
+  "minThroughputMsgSec": 1000.0,
+  "maxDropRate": 0.01
+}
