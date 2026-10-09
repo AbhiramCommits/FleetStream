@@ -16,6 +16,8 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+      - name: Set up sbt
+        uses: sbt/setup-sbt@v1
       - name: Check formatting
         run: sbt scalafmtCheckAll
 
@@ -28,6 +30,8 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+      - name: Set up sbt
+        uses: sbt/setup-sbt@v1
       - name: Run tests with coverage
         run: sbt clean coverage test coverageAggregate
 
@@ -40,6 +44,8 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+      - name: Set up sbt
+        uses: sbt/setup-sbt@v1
       - name: Run benchmark smoke test
         run: |
           chmod +x ./scripts/bench.sh
